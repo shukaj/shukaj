@@ -24,7 +24,7 @@ function organization(doc: Doc) {
     "@id": ORG_ID,
     name: "Шукай",
     url: abs(pagePath(doc.lang, "home")),
-    logo: abs("/logo-192.jpg"),
+    logo: abs("/logo-night-192.jpg"),
     sameAs: [BOT, CHANNEL, GITHUB],
   };
 }
@@ -113,7 +113,7 @@ export function jsonLd(site: Site, doc: Doc): object[] {
       image: ogImage(doc.lang),
       mainEntityOfPage: url,
       author: { "@id": ORG_ID, "@type": "Organization", name: "Шукай", url: abs(pagePath(doc.lang, "home")) },
-      publisher: { "@type": "Organization", "@id": ORG_ID, name: "Шукай", logo: { "@type": "ImageObject", url: abs("/logo-192.jpg") } },
+      publisher: { "@type": "Organization", "@id": ORG_ID, name: "Шукай", logo: { "@type": "ImageObject", url: abs("/logo-night-192.jpg") } },
     });
     if (doc.steps?.length) {
       out.push({

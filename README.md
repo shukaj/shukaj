@@ -1,4 +1,4 @@
-<img src="public/logo-192.jpg" alt="Шукай!" width="96" align="right">
+<img src="public/logo-night-192.jpg" alt="Шукай!" width="96" align="right">
 
 # Шукай: Telegram-бот для новых объявлений Kufar
 

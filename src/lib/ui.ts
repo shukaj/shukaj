@@ -92,4 +92,4 @@ export const other = (lang: Lang): Lang => (lang === "ru" ? "be" : "ru");
 export const prefix = (lang: Lang) => (lang === "be" ? "/be" : "");
 export const pagePath = (lang: Lang, id: string) => (id === "home" ? `${prefix(lang)}/` : `${prefix(lang)}/${id}/`);
 export const guidePath = (lang: Lang, slug: string) => `${prefix(lang)}/guides/${slug}/`;
-export const ogImage = (lang: Lang) => `${SITE}/og/${lang}.png`;
+export const ogImage = (lang: Lang) => `${SITE}/og/${lang}-night.png`;

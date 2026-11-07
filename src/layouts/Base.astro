@@ -33,15 +33,15 @@ const switchHref = (l: Lang) => (urls ? urls[l] : pagePath(l, "home"));
     <title>{title}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex" />}
-    <meta name="theme-color" content="#FFD43B" />
+    <meta name="theme-color" content="#1E1B4B" />
     {site.googleVerification && <meta name="google-site-verification" content={site.googleVerification} />}
     {site.yandexVerification && <meta name="yandex-verification" content={site.yandexVerification} />}
     {urls && <link rel="canonical" href={`${SITE}${path}`} />}
     {urls && <link rel="alternate" hreflang="ru" href={`${SITE}${urls.ru}`} />}
     {urls && <link rel="alternate" hreflang="be" href={`${SITE}${urls.be}`} />}
     {urls && <link rel="alternate" hreflang="x-default" href={`${SITE}${urls.ru}`} />}
-    <link rel="icon" type="image/jpeg" href="/logo-192.jpg" />
-    <link rel="apple-touch-icon" href="/logo-192.jpg" />
+    <link rel="icon" type="image/jpeg" href="/logo-night-192.jpg" />
+    <link rel="apple-touch-icon" href="/logo-night-192.jpg" />
     <link rel="preload" href="/fonts/unbounded.woff2" as="font" type="font/woff2" crossorigin />
     {!noindex && (
       <>
@@ -69,7 +69,7 @@ const switchHref = (l: Lang) => (urls ? urls[l] : pagePath(l, "home"));
     <a class="skip" href="#main">{lang === "be" ? "Да зместу" : "К содержанию"}</a>
     <header class="top wrap">
       <a class="logo" href={pagePath(lang, "home")}>
-        <img src="/logo-192.jpg" width="44" height="44" alt={t.logoAlt} />
+        <img src="/logo-night-192.jpg" width="44" height="44" alt={t.logoAlt} />
       </a>
       <nav aria-label={t.navLabel}>
         <span class="nav-pages">
