@@ -17,7 +17,7 @@ const t = ui[doc.lang];
     <p class="saved">{hero.saved}</p>
     <ul class="feed" aria-hidden="true">
       {hero.ads.map((ad) => (
-        <li class={ad.kind === "plain" ? undefined : ad.kind}><span class="t">{ad.title}</span><span class="p">{ad.was && <s>{ad.was}</s>}{ad.price}</span><span class="m">{ad.meta}{ad.tag && <> · <span class="tag">{ad.tag}</span></>}</span></li>
+        <li class={ad.kind === "plain" ? undefined : ad.kind}><span class="t">{ad.title}</span><span class="p">{ad.was && <><s>{ad.was}</s>{" "}</>}{ad.price}</span><span class="m">{ad.meta}{ad.tag && <> · <span class="tag">{ad.tag}</span></>}</span></li>
       ))}
     </ul>
   </div>
