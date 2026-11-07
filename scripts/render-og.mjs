@@ -12,7 +12,6 @@ const CHROME = process.env.CHROME ?? "C:/Program Files/Google/Chrome/Application
 const url = (p) => pathToFileURL(path.join(ROOT, p)).href;
 
 const handle = { ru: "@shukajbot · @shukajnews", be: "@shukajbot · @shukajnews" };
-const tag = { ru: "Бесплатно. Платные планы за звёзды Telegram.", be: "Бясплатна. Платныя планы за зоркі Telegram." };
 
 fs.mkdirSync(path.join(ROOT, "public", "og"), { recursive: true });
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "shukaj-og-"));
@@ -39,7 +38,7 @@ h1{position:absolute;left:72px;top:220px;margin:0;width:1000px;font:800 64px/1.0
 <div class="search">${esc(fm.hero.search)}<svg viewBox="0 0 600 14" preserveAspectRatio="none"><path d="M3 9 C 120 4, 260 12, 380 7 S 540 5, 597 8" fill="none" stroke="#1E1B4B" stroke-width="3" stroke-linecap="round"/></svg></div>
 <div class="saved">${esc(fm.hero.saved)}</div>
 <h1>${esc(fm.h1)}</h1>
-<div class="sub">${esc(tag[lang])}</div>
+<div class="sub">${esc(fm.hero.note)}</div>
 <div class="foot">${handle[lang]}</div>
 </div></body></html>`;
   const file = path.join(tmp, `${lang}.html`);

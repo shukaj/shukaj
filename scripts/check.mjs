@@ -304,7 +304,7 @@ for (const [url, { file, root }] of pages) {
   // start links
   const starts = root.querySelectorAll("a").map((a) => a.getAttribute("href")).filter((h) => h?.startsWith(START_BASE));
   const expected = startFor(url);
-  if (!starts.length && !/^\/(be\/)?guides\/$/.test(url)) fail(where, "no «Открыть бота» start link");
+  if (!starts.length) fail(where, "no «Открыть бота» start link");
   for (const h of starts) {
     const payload = h.slice(START_BASE.length);
     if (payload !== expected) fail(where, `start link payload "${payload}", expected "${expected}"`);

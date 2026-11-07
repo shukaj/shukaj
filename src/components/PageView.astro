@@ -1,7 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
 import Hero from "./Hero.astro";
-import { loadSite, pairOf, relatedLinks, guideList, nbsp } from "../lib/content";
+import { loadSite, pairOf, relatedLinks, guideList, nbsp, startUrl } from "../lib/content";
 import { crumbs, jsonLd } from "../lib/seo";
 import { ui, type Lang } from "../lib/ui";
 
@@ -49,6 +49,9 @@ const date = (d: Date) => `${d.getUTCDate()} ${t.months[d.getUTCMonth()]} ${d.ge
           </ul>
         </div>
       </section>
+    )}
+    {isGuideIndex && !doc.html.includes("class=\"cta\"") && (
+      <p class="cta-row"><a class="cta" href={startUrl(doc)}>{t.open}</a></p>
     )}
     {doc.faq.length > 0 && (
       <section class="sec faq">
