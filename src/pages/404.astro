@@ -1,0 +1,14 @@
+---
+import Base from "../layouts/Base.astro";
+import { ui } from "../lib/ui";
+const ru = ui.ru;
+const be = ui.be;
+---
+<Base lang="ru" title={`${ru.notFound.title} · ${be.notFound.title}`} description={ru.notFound.title} noindex bothLangs>
+  <div class="wrap page-head">
+    <h1>{ru.notFound.title}</h1>
+    <p class="lede">{ru.notFound.text} <a href="/">{ru.notFound.home}</a></p>
+    <h2 lang="be" class="second">{be.notFound.title}</h2>
+    <p class="lede" lang="be">{be.notFound.text} <a href="/be/">{be.notFound.home}</a></p>
+  </div>
+</Base>

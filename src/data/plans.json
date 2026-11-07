@@ -1,0 +1,10 @@
+{
+  "_note": "Every Plan number the site shows. Must match the live bot's .env (kufar-bot repo). Update on the day a Plan change is announced in @shukajnews.",
+  "free":  { "kept": 2,   "active": 1, "everyMinutes": 30, "stars": 0 },
+  "pro":   { "kept": 10,  "active": 2, "everyMinutes": 5,  "stars": 300 },
+  "ultra": { "kept": null, "active": 2, "everyMinutes": 1,  "stars": 650 },
+  "periodDays": 30,
+  "trialDays": 1,
+  "prolong": { "freeDays": 1, "paidDays": 3, "graceHours": 12 },
+  "quietHours": { "start": "22:00", "end": "08:00" }
+}

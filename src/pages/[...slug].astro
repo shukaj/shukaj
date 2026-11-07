@@ -1,0 +1,10 @@
+---
+import PageView from "../components/PageView.astro";
+import { staticPaths } from "../lib/content";
+
+export async function getStaticPaths() {
+  return staticPaths("ru");
+}
+const { id, kind } = Astro.props;
+---
+<PageView lang="ru" kind={kind} id={id} />

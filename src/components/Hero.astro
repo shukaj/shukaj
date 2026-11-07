@@ -1,0 +1,29 @@
+---
+import { nbsp, startUrl, type Doc } from "../lib/content";
+import { ui } from "../lib/ui";
+
+interface Props { doc: Doc }
+const { doc } = Astro.props;
+const hero = doc.hero!;
+const t = ui[doc.lang];
+---
+<section class="hero wrap">
+  <h1>{nbsp(doc.h1)}</h1>
+  <div class="demo" role="group" aria-label={t.heroLabel(hero.search)}>
+    <p class="search">
+      <span class="typed">{hero.search}</span>
+      <svg class="under" viewBox="0 0 600 14" preserveAspectRatio="none" aria-hidden="true"><path d="M3 9 C 120 4, 260 12, 380 7 S 540 5, 597 8"></path></svg>
+    </p>
+    <p class="saved">{hero.saved}</p>
+    <ul class="feed" aria-hidden="true">
+      {hero.ads.map((ad) => (
+        <li class={ad.kind === "plain" ? undefined : ad.kind}><span class="t">{ad.title}</span><span class="p">{ad.was && <s>{ad.was}</s>}{ad.price}</span><span class="m">{ad.meta}{ad.tag && <> · <span class="tag">{ad.tag}</span></>}</span></li>
+      ))}
+    </ul>
+  </div>
+  <div class="act">
+    <a class="cta" href={startUrl(doc)}>{t.open}</a>
+    <p class="sub">{hero.sub}</p>
+    <p class="or">{hero.note}</p>
+  </div>
+</section>

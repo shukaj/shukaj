@@ -1,0 +1,113 @@
+---
+import "../styles/site.css";
+import site from "../data/site.json";
+import { ui, SITE, BOT, CHANNEL, GITHUB, ogImage, pagePath, other, type Lang } from "../lib/ui";
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  /** URL path of this page. Omitted on the 404 page: no canonical, no hreflang. */
+  path?: string;
+  /** Path of the same page in the other language. */
+  pairPath?: string;
+  noindex?: boolean;
+  jsonld?: object[];
+  /** The 404 page has both languages in its footer. */
+  bothLangs?: boolean;
+}
+const { lang, title, description, path, pairPath, noindex = false, jsonld = [], bothLangs = false } = Astro.props;
+const t = ui[lang];
+const alt = other(lang);
+const urls = path && pairPath ? { [lang]: path, [alt]: pairPath } as Record<Lang, string> : undefined;
+const image = ogImage(lang);
+const ld = (o: object) => JSON.stringify(o).replace(/</g, "\\u003c");
+const footerLangs: Lang[] = bothLangs ? ["ru", "be"] : [lang];
+const switchHref = (l: Lang) => (urls ? urls[l] : pagePath(l, "home"));
+---
+<!doctype html>
+<html lang={t.htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#FFD43B" />
+    {site.googleVerification && <meta name="google-site-verification" content={site.googleVerification} />}
+    {site.yandexVerification && <meta name="yandex-verification" content={site.yandexVerification} />}
+    {urls && <link rel="canonical" href={`${SITE}${path}`} />}
+    {urls && <link rel="alternate" hreflang="ru" href={`${SITE}${urls.ru}`} />}
+    {urls && <link rel="alternate" hreflang="be" href={`${SITE}${urls.be}`} />}
+    {urls && <link rel="alternate" hreflang="x-default" href={`${SITE}${urls.ru}`} />}
+    <link rel="icon" type="image/jpeg" href="/logo-192.jpg" />
+    <link rel="apple-touch-icon" href="/logo-192.jpg" />
+    <link rel="preload" href="/fonts/unbounded.woff2" as="font" type="font/woff2" crossorigin />
+    {!noindex && (
+      <>
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Шукай" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={`${SITE}${path}`} />
+        <meta property="og:locale" content={t.ogLocale} />
+        <meta property="og:locale:alternate" content={ui[alt].ogLocale} />
+        <meta property="og:image" content={image} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content={t.ogAlt} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={image} />
+        <meta name="twitter:image:alt" content={t.ogAlt} />
+      </>
+    )}
+    {jsonld.map((o) => <script type="application/ld+json" set:html={ld(o)} />)}
+  </head>
+  <body>
+    <a class="skip" href="#main">{lang === "be" ? "Да зместу" : "К содержанию"}</a>
+    <header class="top wrap">
+      <a class="logo" href={pagePath(lang, "home")}>
+        <img src="/logo-192.jpg" width="44" height="44" alt={t.logoAlt} />
+      </a>
+      <nav aria-label={t.navLabel}>
+        <span class="nav-pages">
+          <a href={pagePath(lang, "tarify")}>{t.nav.tarify}</a>
+          <a href={pagePath(lang, "faq")}>{t.nav.faq}</a>
+          <a href={pagePath(lang, "guides")}>{t.nav.guides}</a>
+        </span>
+        <span class="switch">
+          {(["ru", "be"] as Lang[]).map((l, i) => (
+            <>
+              {i > 0 && " / "}
+              {l === lang && !bothLangs ? (
+                <b aria-current="true">{l.toUpperCase()}</b>
+              ) : (
+                <a href={switchHref(l)} hreflang={l} lang={l}>{l.toUpperCase()}</a>
+              )}
+            </>
+          ))}
+        </span>
+      </nav>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+    <footer class="foot wrap">
+      {footerLangs.map((l) => (
+        <p class="disclaimer" lang={l}>{ui[l].disclaimer}.</p>
+      ))}
+      <p class="addresses">
+        {ui[footerLangs[0]].official}:
+        <a href={BOT}>@shukajbot</a>, <a href={CHANNEL}>@shukajnews</a>, <a href={GITHUB}>github.com/shukaj</a>
+      </p>
+      <nav class="foot-nav" aria-label={t.navLabel}>
+        <a href={pagePath(lang, "home")}>{t.home}</a>
+        <a href={pagePath(lang, "tarify")}>{t.nav.tarify}</a>
+        <a href={pagePath(lang, "faq")}>{t.nav.faq}</a>
+        <a href={pagePath(lang, "guides")}>{t.nav.guides}</a>
+      </nav>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,77 @@
+---
+import Base from "../layouts/Base.astro";
+import Hero from "./Hero.astro";
+import { loadSite, pairOf, relatedLinks, guideList, nbsp } from "../lib/content";
+import { crumbs, jsonLd } from "../lib/seo";
+import { ui, type Lang } from "../lib/ui";
+
+interface Props { lang: Lang; kind: "page" | "guide"; id: string }
+const { lang, kind, id } = Astro.props;
+const site = await loadSite();
+const doc = (kind === "page" ? site.pages : site.guides)[lang].get(id)!;
+const pair = pairOf(site, doc);
+const t = ui[lang];
+const trail = crumbs(site, doc);
+const related = relatedLinks(site, doc);
+const isHome = kind === "page" && id === "home";
+const isGuideIndex = kind === "page" && id === "guides";
+const guides = isGuideIndex ? guideList(site, lang) : [];
+const date = (d: Date) => `${d.getUTCDate()} ${t.months[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
+---
+<Base lang={lang} title={doc.title} description={doc.description} path={doc.path} pairPath={pair.path} jsonld={jsonLd(site, doc)}>
+  {isHome ? (
+    <Hero doc={doc} />
+  ) : (
+    <div class="wrap page-head">
+      {trail.length > 0 && (
+        <nav class="crumbs" aria-label={t.breadcrumbs}>
+          <ol>
+            {trail.map((c, i) => (
+              <li>{i < trail.length - 1 ? <a href={c.href}>{c.label}</a> : <span aria-current="page">{c.label}</span>}</li>
+            ))}
+          </ol>
+        </nav>
+      )}
+      <h1>{nbsp(doc.h1)}</h1>
+      {doc.published && <p class="date"><time datetime={doc.published.toISOString().slice(0, 10)}>{t.published} {date(doc.published)}</time></p>}
+    </div>
+  )}
+  <div class="wrap prose" class:list={{ "after-hero": isHome }}>
+    <Fragment set:html={doc.html} />
+    {isGuideIndex && guides.length > 0 && (
+      <section class="sec">
+        <h2>{t.guides}</h2>
+        <div class="sec-body">
+          <ul class="links">
+            {guides.map((g) => (
+              <li><a href={g.path}>{g.h1}</a><span>{g.description}</span></li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )}
+    {doc.faq.length > 0 && (
+      <section class="sec faq">
+        <h2>{t.faq}</h2>
+        <div class="sec-body">
+          {doc.faq.map((f) => (
+            <div class="qa">
+              <h3>{f.q}</h3>
+              <Fragment set:html={f.aHtml} />
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+    {related.length > 0 && (
+      <section class="sec related">
+        <h2>{t.related}</h2>
+        <div class="sec-body">
+          <ul class="links">
+            {related.map((r) => <li><a href={r.href}>{r.label}</a></li>)}
+          </ul>
+        </div>
+      </section>
+    )}
+  </div>
+</Base>
