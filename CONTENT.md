@@ -17,7 +17,7 @@ How the site's words are stored, so templates and copy can be written apart. The
 | `pages/*/<id>.md` | `/<id>/` | `/be/<id>/` |
 | `guides/*/<slug>.md` | `/guides/<slug>/` | `/be/guides/<slug>/` |
 
-Page ids: `home`, `kvartiry`, `avto`, `telefony`, `ssylka`, `faq`, `tarify`. `/guides/` itself is a list page built from the guides (its title and intro live in `pages/*/guides.md`).
+Page ids: `home`, `kvartiry`, `avto`, `telefony`, `ssylka`, `faq`, `tarify`. The bot counts new Users only for these ids and `guide-<slug>` (its `core/site.py`), so a new page id has to be added there too. `/guides/` itself is a list page built from the guides (its title and intro live in `pages/*/guides.md`).
 
 ## Frontmatter
 
