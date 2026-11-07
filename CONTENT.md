@@ -37,7 +37,7 @@ faq:                         # optional; rendered as a list and as FAQPage struc
 
 Guides add `published: 2026-11-08` and, when the guide is a list of steps, `steps:` (`- name: … / text: …`) for HowTo structured data. The guide's body still writes the steps out in Markdown; `steps` is only the structured copy.
 
-The home page adds a `hero:` block for the first screen (the yellow «Маркер» screen with Ads arriving, `.scratch/website/prototypes/d-marker-feed.html` in the bot's repo):
+The home page adds a `hero:` block for the first screen: the typed search, then the bot's pushes stacking up as iOS shows them (newest on top), and the bumped Ad as a dashed ghost under them, since it never comes. The push lines' emoji (🔍, 📉, 💰) and «Шукай!» are in the template, not here.
 
 ```yaml
 hero:
@@ -45,8 +45,11 @@ hero:
   saved: "Сохранено. Слежу."
   sub: "…"
   note: "…"                  # the small line under the button
-  ads:                       # newest first; kind: new | drop | bump | plain
-    - { kind: new,  title: "…", price: "390 р.", was: "", meta: "…", tag: "…" }
+  pushSearch: "Велосипеды · Гродно"   # each push's search line
+  dropMark: "Цена снижена"            # the Price Drop push's first line
+  ghost: "поднято, не придёт"         # the label on the bumped Ad
+  ads:                       # in stack order, newest first: one new, one drop, then plain ones; the bump becomes the ghost
+    - { kind: new, title: "…", price: "390 р.", was: "", when: "сейчас" }
 ```
 
 ## Body

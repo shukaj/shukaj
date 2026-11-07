@@ -9,12 +9,15 @@ hero:
   saved: "Сохранено. Слежу."
   sub: "Собери поиск в боте или пришли ссылку с Куфара. Новое пришлю при первой же проверке, подешевевшее ещё раз, поднятое старое пропущу."
   note: "Бесплатно. Платные планы за звёзды Telegram."
+  pushSearch: "Велосипеды · Гродно"
+  dropMark: "Цена снижена"
+  ghost: "поднято, не придёт"
   ads:
-    - { kind: new,   title: "Stels Navigator 700 MD, 27.5\"", price: "390 р.", was: "",    meta: "Девятовка · сейчас",  tag: "новое, прислал" }
-    - { kind: drop,  title: "Merida Big Nine 20, рама L",     price: "380 р.", was: "450", meta: "Вишнёвец · 2 ч",     tag: "дешевле, прислал ещё раз" }
-    - { kind: bump,  title: "Forward Sporting 2.0",           price: "350 р.", was: "",    meta: "Центр · 3 дня",      tag: "поднято, не повторяю" }
-    - { kind: plain, title: "Aist Quest 26, как новый",       price: "260 р.", was: "",    meta: "Ольшанка · вчера",   tag: "" }
-    - { kind: plain, title: "Stark Router 28, гидравлика",    price: "300 р.", was: "",    meta: "Форты · 2 дня",      tag: "" }
+    - { kind: new,   title: "Stels Navigator 700 MD, 27.5\"", price: "390 р.", was: "",       when: "сейчас" }
+    - { kind: drop,  title: "Merida Big Nine 20, рама L",     price: "380 р.", was: "450 р.", when: "2 мин назад" }
+    - { kind: plain, title: "Aist Quest 26, как новый",       price: "260 р.", was: "",       when: "1 ч назад" }
+    - { kind: plain, title: "Stark Router 28, гидравлика",    price: "300 р.", was: "",       when: "вчера" }
+    - { kind: bump,  title: "Forward Sporting 2.0",           price: "350 р.", was: "",       when: "" }
 ---
 
 ## Как это работает

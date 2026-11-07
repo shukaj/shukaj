@@ -10,6 +10,9 @@ const hero = z
     saved: z.string(),
     sub: z.string(),
     note: z.string(),
+    pushSearch: z.string(),   // the push's search line, after 🔍
+    dropMark: z.string(),     // the Price Drop push's first line, after 📉
+    ghost: z.string(),        // the label on the bumped Ad that doesn't come
     ads: z
       .array(
         z
@@ -18,8 +21,7 @@ const hero = z
             title: z.string(),
             price: z.string(),
             was: z.string().default(""),
-            meta: z.string(),
-            tag: z.string().default(""),
+            when: z.string(),
           })
           .strict(),
       )

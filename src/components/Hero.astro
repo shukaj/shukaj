@@ -6,6 +6,9 @@ interface Props { doc: Doc }
 const { doc } = Astro.props;
 const hero = doc.hero!;
 const t = ui[doc.lang];
+// The pushes as iOS stacks them, newest on top; the bumped Ad never comes, so it's a ghost under them.
+const pushed = hero.ads.filter((ad) => ad.kind !== "bump");
+const bumped = hero.ads.find((ad) => ad.kind === "bump");
 ---
 <section class="hero wrap">
   <h1>{nbsp(doc.h1)}</h1>
@@ -15,11 +18,23 @@ const t = ui[doc.lang];
       <svg class="under" viewBox="0 0 600 14" preserveAspectRatio="none" aria-hidden="true"><path d="M3 9 C 120 4, 260 12, 380 7 S 540 5, 597 8"></path></svg>
     </p>
     <p class="saved">{hero.saved}</p>
-    <ul class="feed" aria-hidden="true">
-      {hero.ads.map((ad) => (
-        <li class={ad.kind === "plain" ? undefined : ad.kind}><span class="t">{ad.title}</span><span class="p">{ad.was && <><s>{ad.was}</s>{" "}</>}{ad.price}</span><span class="m">{ad.meta}{ad.tag && <> · <span class="tag">{ad.tag}</span></>}</span></li>
-      ))}
-    </ul>
+    <div class="pushes" aria-hidden="true">
+      <ul class="stack">
+        {pushed.map((ad) => (
+          <li class={`push ${ad.kind}`}>
+            <span class="av"><img src="/logo-night-192.jpg" width="48" height="48" alt="" /><svg viewBox="0 0 24 24"><path d="M5.2 11.6l12.2-4.7c.6-.2 1.1.1.9.9l-2.1 9.8c-.1.7-.6.8-1.1.5l-3.1-2.3-1.5 1.4c-.2.2-.3.3-.6.3l.2-3.2 5.8-5.2c.3-.2-.1-.4-.4-.2l-7.2 4.5-3.1-1c-.7-.2-.7-.7.1-1z" fill="#fff" /></svg></span>
+            <span class="tx">
+              <span class="from">Шукай!</span>
+              <span>{ad.kind === "drop" ? `📉 ${hero.dropMark}` : `🔍 ${hero.pushSearch}`}</span>
+              <span>{ad.title}</span>
+              <span>💰 {ad.was && <><s>{ad.was}</s> → </>}{ad.price}</span>
+            </span>
+            <span class="when">{ad.when}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+    {bumped && <p class="ghost" aria-hidden="true"><span>{bumped.title} · {bumped.price}</span><b>{hero.ghost}</b></p>}
   </div>
   <div class="act">
     <a class="cta" href={startUrl(doc)}>{t.open}</a>

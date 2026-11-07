@@ -2,6 +2,7 @@
 @font-face { font-family: "Unbounded"; src: url("/fonts/unbounded.woff2") format("woff2"); font-weight: 700 800; font-display: swap; }
 @font-face { font-family: "PT Serif"; src: url("/fonts/pt-serif-italic.woff2") format("woff2"); font-style: italic; font-weight: 400; font-display: swap; }
 @font-face { font-family: "IBM Plex Mono"; src: url("/fonts/plex-mono-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Inter"; src: url("/fonts/inter.woff2") format("woff2"); font-weight: 400 700; font-display: swap; }
 @font-face { font-family: "IBM Plex Mono"; src: url("/fonts/plex-mono-500.woff2") format("woff2"); font-weight: 500; font-display: swap; }
 
 :root {
@@ -15,6 +16,7 @@
   --wide: "Unbounded", sans-serif;
   --serif: "PT Serif", serif;
   --mono: "IBM Plex Mono", monospace;
+  --push: "Inter", sans-serif;  /* only the pushes in the hero, close to how iOS sets them */
   --gutter: 16px;
 }
 *, *::before, *::after { box-sizing: border-box; }
@@ -114,7 +116,6 @@ img, video { display: block; max-width: 100%; }
 /* Home hero: the yellow Marker screen with Ads arriving. */
 .hero { padding-top: 20px; padding-bottom: 56px; display: grid; gap: 26px; grid-template-areas: "h" "demo" "act"; }
 .hero h1 { grid-area: h; } .demo { grid-area: demo; } .act { grid-area: act; }
-.feed li:nth-child(n+4) { display: none; }
 .hero h1 { color: var(--yellow); margin: 0; font: 800 27px/1.08 var(--wide); letter-spacing: -.02em; max-width: 18ch; }
 .sub { margin: 20px 0 0; font: italic 19px/1.4 var(--serif); max-width: 32ch; }
 .or { margin: 14px 0 0; font: 400 13px/1.5 var(--mono); }
@@ -133,30 +134,34 @@ img, video { display: block; max-width: 100%; }
 .saved { margin: 8px 0 0; font: 500 12.5px/1.5 var(--mono); opacity: 0; animation: show .3s 3s forwards; }
 @keyframes show { to { opacity: 1; } }
 
-/* 2. Then Ads arrive: each pops in on top and pushes the rest down. */
-.feed { margin: 18px 0 0; padding: 0; list-style: none; font: 400 13px/1.25 var(--mono); }
-.feed li { position: relative; display: grid; grid-template-columns: 1fr auto; gap: 3px 12px; padding: 10px 12px; margin: 0 -12px;
-           border-top: 1px solid var(--rule); opacity: 0; transform: translateY(-14px) scale(.98);
-           animation: pop .45s cubic-bezier(.2,1.4,.4,1) forwards; }
-.feed li:last-child { border-bottom: 1px solid var(--rule); }
-.feed .t { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.feed .m { grid-column: 1 / -1; font-size: 11px; opacity: .7; }
-.feed .p s { opacity: .6; margin-right: 6px; }
-@keyframes pop { to { opacity: 1; transform: none; } }
-/* Arrival order, bottom (oldest) first; the newest lands on top last. */
-.feed li:nth-child(5) { animation-delay: 3.5s; }
-.feed li:nth-child(4) { animation-delay: 3.7s; }
-.feed li:nth-child(3) { animation-delay: 4.6s; }
-.feed li:nth-child(2) { animation-delay: 5.5s; }
-.feed li:nth-child(1) { animation-delay: 6.5s; }
-.feed li.new  { background: var(--yellow); color: var(--ink); border-color: var(--yellow); }
-.feed li.new .m { color: var(--ink); opacity: .85; }
-.feed li.bump { opacity: 0; animation-name: pop-faded; }
-@keyframes pop-faded { to { opacity: .72; transform: none; } }
-.tag { font-weight: 500; }
+/* 2. Then the bot's pushes arrive, stacked as iOS shows them. The window has a fixed height and the stack moves
+   only by transform, so nothing below it shifts. Before the arrivals the stack sits two slots up (the two
+   newest pushes are above the window, unseen); the Price Drop lands at ~4.2 s, the New Ad at ~5.6 s. */
+.pushes { --card: 92px; --gap: 10px; --slot: calc(var(--card) + var(--gap)); position: relative; height: calc(var(--slot) * 3 - var(--gap)); margin-top: 18px; overflow: hidden; }
+.stack { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--gap); transform: translateY(calc(var(--slot) * -2));
+         animation: stack 6.4s cubic-bezier(.3,.9,.3,1) forwards; }
+@keyframes stack { 0%, 66% { transform: translateY(calc(var(--slot) * -2)); } 73%, 87% { transform: translateY(calc(var(--slot) * -1)); } 94%, 100% { transform: translateY(0); } }
+.push { position: relative; height: var(--card); display: flex; align-items: center; gap: 12px; padding: 0 14px; border-radius: 22px;
+        background: rgba(247,245,240,.11); border: 1px solid rgba(247,245,240,.08); color: #fff; font: 400 13.5px/1.3 var(--push); }
+.push .av { position: relative; flex: none; width: 42px; height: 42px; }
+.push .av img { width: 100%; height: 100%; border-radius: 50%; }
+.push .av svg { position: absolute; right: -3px; bottom: -3px; width: 18px; height: 18px; border-radius: 5px; background: #2AABEE; box-shadow: 0 0 0 2px var(--ink); }
+.push .tx { flex: 1; min-width: 0; display: grid; }
+.push .tx span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.push .from { font-weight: 700; }
+.push .when { position: absolute; right: 16px; top: 11px; font-size: 12px; color: rgba(255,255,255,.6); }
+.push s { color: rgba(255,255,255,.65); }
+.push.drop { opacity: 0; animation: arrive-drop 6.4s linear forwards; }
+.push.new { opacity: 0; animation: arrive-new 6.4s linear forwards; }
+@keyframes arrive-drop { 0%, 66% { opacity: 0; transform: scale(.94); } 72% { opacity: 1; transform: none; background: rgba(247,245,240,.22); } 100% { opacity: 1; transform: none; } }
+@keyframes arrive-new  { 0%, 87% { opacity: 0; transform: scale(.94); } 93% { opacity: 1; transform: none; background: rgba(247,245,240,.22); } 100% { opacity: 1; transform: none; } }
+.push.plain { opacity: 0; animation: show .4s 3.3s forwards; }
+.ghost { margin: 10px 0 0; display: flex; justify-content: space-between; gap: 12px; padding: 12px 14px; border: 1px dashed rgba(247,245,240,.35);
+         border-radius: 22px; font: 400 12.5px/1.35 var(--mono); color: rgba(247,245,240,.8); opacity: 0; animation: show .4s 3.5s forwards; }
+.ghost b { font-weight: 500; color: var(--yellow); white-space: nowrap; }
 @media (prefers-reduced-motion: reduce) {
-  .typed, .under path, .saved, .feed li { animation: none; }
-  .under path { stroke-dashoffset: 0; } .saved, .feed li { opacity: 1; transform: none; } .feed li.bump { opacity: .72; }
+  .typed, .under path, .saved, .stack, .push, .ghost { animation: none; }
+  .under path { stroke-dashoffset: 0; } .saved, .push, .ghost { opacity: 1; } .stack { transform: none; }
 }
 
 @media (min-width: 900px) {
@@ -165,15 +170,14 @@ img, video { display: block; max-width: 100%; }
   .nav-pages { display: flex; gap: 28px; }
   .hero { grid-template-columns: 1fr 1fr; grid-template-areas: "h demo" "act demo"; column-gap: 88px; row-gap: 30px; align-content: center; min-height: calc(100vh - 88px); padding-top: 0; padding-bottom: 0; }
   .hero h1 { align-self: end; } .act { align-self: start; } .demo { align-self: center; }
-  .feed li:nth-child(n+4) { display: grid; }
   .hero h1 { font-size: clamp(40px, 4vw, 58px); }
   .sub { font-size: 22px; margin-top: 26px; }
   .cta { font-size: 19px; padding: 22px 32px; }
   .search { font-size: clamp(24px, 2.3vw, 34px); }
   .saved { font-size: 14px; }
-  .feed { font-size: 15px; margin-top: 26px; }
-  .feed li { padding: 13px 14px; margin: 0 -14px; }
-  .feed .m { font-size: 12px; }
+  .pushes { --card: 100px; --gap: 12px; height: calc(var(--slot) * 4 - var(--gap)); margin-top: 24px; }
+  .push { font-size: 15px; padding: 0 18px; gap: 14px; } .push .av { width: 48px; height: 48px; }
+  .ghost { font-size: 13.5px; }
 
   .page-head { padding-top: 40px; }
   .page-head h1, .page-head .second { font-size: clamp(34px, 3.6vw, 52px); }

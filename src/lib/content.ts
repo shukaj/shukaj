@@ -10,8 +10,8 @@ type Plans = typeof plans;
 
 export interface Faq { q: string; a: string; aHtml: string }
 export interface Hero {
-  search: string; saved: string; sub: string; note: string;
-  ads: { kind: "new" | "drop" | "bump" | "plain"; title: string; price: string; was: string; meta: string; tag: string }[];
+  search: string; saved: string; sub: string; note: string; pushSearch: string; dropMark: string; ghost: string;
+  ads: { kind: "new" | "drop" | "bump" | "plain"; title: string; price: string; was: string; when: string }[];
 }
 export interface Doc {
   kind: "page" | "guide";
@@ -155,13 +155,15 @@ function build(kind: "page" | "guide", e: RawPage | RawGuide): Doc {
       saved: plain(hero.saved, lang, w("hero.saved")),
       sub: plain(hero.sub, lang, w("hero.sub")),
       note: plain(hero.note, lang, w("hero.note")),
+      pushSearch: plain(hero.pushSearch, lang, w("hero.pushSearch")),
+      dropMark: plain(hero.dropMark, lang, w("hero.dropMark")),
+      ghost: plain(hero.ghost, lang, w("hero.ghost")),
       ads: hero.ads.map((a, i) => ({
         kind: a.kind,
         title: plain(a.title, lang, w(`hero.ads[${i}].title`)),
         price: plain(a.price, lang, w(`hero.ads[${i}].price`)),
         was: plain(a.was, lang, w(`hero.ads[${i}].was`)),
-        meta: plain(a.meta, lang, w(`hero.ads[${i}].meta`)),
-        tag: plain(a.tag, lang, w(`hero.ads[${i}].tag`)),
+        when: plain(a.when, lang, w(`hero.ads[${i}].when`)),
       })),
     };
   }
